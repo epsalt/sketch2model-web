@@ -1,0 +1,24 @@
+{% extends "boilerplate.html" %}
+{% block content %}
+<h3> What is Sketch2Model? </h3>
+<p>
+  <b>Sketch2Model</b> is a python based webapp that makes converting from schematic
+  diagrams to color block models easy. Just take a photo of your drawing, upload, and
+  let <b>Sketch2Model</b> do the rest!
+  <br><br>
+  This app is the continuation of a project from the
+  <a href="http://www.agilegeoscience.com/blog/2015/5/15/canadian-codeshow">2015 Calgary Geoscience Hackathon</a>
+  organized by <a href="http://www.agilegeoscience.com/">Agile Geoscience.</a>
+</p>
+<h3> How does Sketch2Model work? </h3>
+<p>
+  <b>Sketch2Model</b> uses the python library <a href="http://scikit-image.org/">scikit-image</a>
+  to process and identify regions in the photos you upload. If you want to learn more or
+  contribute check out <a href="https://github.com/mycarta/sketch2model">Sketch2Model on GitHub</a>.
+</p>
+<h3> Who made Sketch2Model?</h3>
+<p>
+  This website was made in Canada by 
+  <a href="https://scibbatical.wordpress.com/">Elwyn</a>+<a href="https://twitter.com/epsalt">Evan</a>+<a href="https://mycarta.wordpress.com/">Matteo</a>.
+</p>
+{% endblock %}

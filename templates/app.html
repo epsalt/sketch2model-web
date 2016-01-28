@@ -1,0 +1,51 @@
+{% extends "boilerplate.html" %}
+{% block content %}
+
+<h2>Step 1: Upload your Sketch!</h2>
+
+{% if uploaded_image is not defined %}
+<div class="imgwrapper">
+  <form action="" method=post name="uploadsubmit_button" enctype=multipart/form-data>
+    <input type="file" name="uploaded_file" onchange="this.form.submit()" id="upload" class="fileupload" />
+      <label for="upload"><i class="fa fa-upload"></i> Upload a Sketch</label>
+  </form>
+</div>
+{% endif %}
+  
+{% if uploaded_image is defined %}
+  <div class="imgwrapper">
+    <img src="{{ uploaded_image }}">
+    <form action="" method=post name="uploadsubmit_button" enctype=multipart/form-data>
+      <input type="file" name="uploaded_file" onchange="this.form.submit()" id="upload" class="fileupload" />
+      <label class="hiddenbutton" for="upload"><i class="fa fa-upload"></i> Upload Another Sketch</label>
+    </form>
+  </div>
+{% endif %}
+  
+<p> Accepted image file types are .jpg, .jpeg, .png, and .gif </p>
+
+{% if uploaded_image is defined %}
+<h2>Step 2: Convert your Sketch to a Model! </h2>
+<div class="imgwrapper">
+  {% if sketched_image is not defined %}
+  <form action="" method="get">
+    <button type="submit" name="sketch_button" value="sketch">
+      <i class="fa fa-cube"></i>  Model Your Sketch!
+    </button>
+  </form>
+  {% endif %}
+  {% if sketched_image is defined %}
+  <form action="" method="get">
+    <button class="hiddenbutton" type="submit" name="download" value="true">
+      <i class="fa fa-download"></i>  Download Your Model
+    </button>
+  </form>
+  <img src="{{ sketched_image }}">
+  {% endif %}
+</div>
+{% endif %}
+{% if sketched_image is defined %}
+<p> Your Sketch has been Modelled! If it didn't turn out as you expected please check our
+  faq page for some hints on getting a good result. </p>
+{% endif %}
+{% endblock %}
