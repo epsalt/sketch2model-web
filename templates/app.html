@@ -29,8 +29,11 @@
 <div class="imgwrapper">
   {% if sketched_image is not defined %}
   <form action="" method="get">
-    <button type="submit" name="sketch_button" value="sketch">
+    <button id="sketch" type="submit" name="sketch_button" value="sketch" onclick="show_loading();">
       <i class="fa fa-cube"></i>  Model Your Sketch!
+    </button>
+    <button id="loading">
+      <i class="fa fa-cog fa-spin"></i> Modelling...
     </button>
   </form>
   {% endif %}
