@@ -2,10 +2,11 @@ import os
 from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 from werkzeug import secure_filename
 from sketch2model.segment_5 import sketch2model
+import numpy
 
 UPLOAD_FOLDER = './assets/'
 SKETCH_FOLDER = './sketches/'
-ALLOWED_EXTENSIONS = set(['jpg'])
+ALLOWED_EXTENSIONS = set(['jpg', 'png'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -43,11 +44,9 @@ def uploaded(filename):
         return(redirect(url_for('index'), code=307))
         
 def sketch(filename):
-    print(filename)
-    #--- Image processing goes here ---
-    image = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    inverted_image = PIL.ImageOps.invert(image)
-    inverted_image.save(os.path.join(app.config['SKETCH_FOLDER'], filename))
+    sketch_name = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    model_name = os.path.join(app.config['SKETCH_FOLDER'], filename)
+    sketch2model(sketch_name, model_name)
     #--- ---
     return(render_template("app.html", uploaded_image=url_for('uploaded_file', filename=filename),
                            sketched_image=url_for('sketched_file', filename=filename)))
