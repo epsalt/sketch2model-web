@@ -39,8 +39,14 @@ p { text-align: justify;
     border-radius: 6px;
     margin: 0 auto;
     position: absolute;
-    top: 45%;
-    right: 35%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 50%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
 }
 
 .fileupload:focus + label, .fileupload + label:hover {
@@ -56,8 +62,14 @@ button {
     margin: 0 auto;
     border: 1px solid transparent;
     position: absolute;
-    top: 45%;
-    right: 30%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 50%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
 }
 
 button:focus, button:hover {
@@ -85,3 +97,4 @@ img {
 .hiddenbutton {
     display: none;
 }
+

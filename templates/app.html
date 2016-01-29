@@ -35,8 +35,8 @@
   </form>
   {% endif %}
   {% if sketched_image is defined %}
-  <form action="" method="get">
-    <button class="hiddenbutton" type="submit" name="download" value="true">
+  <form action="{{ sketched_image }}" method="get">
+    <button class="hiddenbutton" type="submit">
       <i class="fa fa-download"></i>  Download Your Model
     </button>
   </form>
