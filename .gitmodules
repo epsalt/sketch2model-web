@@ -1,0 +1,3 @@
+[submodule "sketch2model"]
+	path = sketch2model
+	url = https://github.com/epsalt/sketch2model.git
