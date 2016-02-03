@@ -23,7 +23,7 @@ def index():
     print(request.method)
     if request.method == 'POST':
         print("UPLOADING")
-        url = upload()
+        return(url)
         return(redirect(url_for('uploaded', filename=filename)))
     else:
         return(render_template("app.html"))
@@ -37,11 +37,11 @@ def upload():
         upload_filename = generate_filename() + extension
 
         # Upload image to s3
-        s3_resource = boto3.resource('s3')
-        s3_resource.Object(S3_BUCKET, S3_UPLOAD_FOLDER + '/'
-                           + upload_filename).put(Body=file,
-                                                  ContentType='image/jpeg',
-                                                  ACL='public-read')
+        s3 = boto3.resource('s3')
+        s3.Object(S3_BUCKET, S3_UPLOAD_FOLDER + '/'
+                  + upload_filename).put(Body=file,
+                                         ContentType='image/jpeg',
+                                         ACL='public-read')
         # Generate URL
         url = "https://{bucket}.s3.amazonaws.com/{folder}/{fname}".format(
             bucket = S3_BUCKET,
