@@ -1,5 +1,5 @@
 import os
-import boto3
+from boto3 import resource
 import time
 from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 from werkzeug import secure_filename
@@ -19,23 +19,25 @@ def allowed_file(filename):
 def upload(bucket, folder):
     file = request.files.get('uploaded_file')
     if file and allowed_file(file.filename):
+        
         # Strip extension off upload and generate new filename
         filename = secure_filename(file.filename)
         extension = os.path.splitext(filename)[1]
         upload_filename = generate_filename() + extension
 
         # Upload image to s3
-        s3 = boto3.resource('s3')
+        s3 = resource('s3')
         s3.Object(bucket, folder + '/'+
                   upload_filename).put(Body=file,
                                        ContentType='image/jpeg',
                                        ACL='public-read')
-        # Generate URL
-        url = "https://{bucket}.s3.amazonaws.com/{folder}/{fname}".format(
-            bucket = bucket,
-            folder = folder,
-            fname  = upload_filename)
-        return(url)
+        return(upload_filename)
+
+def s3_url(fname, bucket, folder):
+    return("https://{bucket}.s3.amazonaws.com/{folder}/{fname}".format(
+        bucket = bucket,
+        folder = folder,
+        fname  = fname))
 
 def sketch(filename):
     sketch_name = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -51,8 +53,8 @@ def generate_filename():
 @app.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        url = upload(app.config['S3_BUCKET'], app.config['UPLOAD_FOLDER'])
-        return(url)
+        filename = upload(app.config['S3_BUCKET'],
+                          app.config['UPLOAD_FOLDER'])
         return(redirect(url_for('uploaded', filename=filename)))
     else:
         return(render_template("app.html"))
@@ -63,19 +65,13 @@ def uploaded(filename):
         if request.args.get('sketch_button'):
             return(sketch(filename))
         else:
-            return(render_template("app.html", uploaded_image=url_for('uploaded_file', filename=filename)))
+            return(render_template("app.html",
+                                   uploaded_image = s3_url(
+                                       filename = filename,
+                                       bucket = app.config['S3_BUCKET'],
+                                       folder = app.config['UPLOAD_FOLDER'])))
     elif request.method == 'POST':
         return(redirect(url_for('index'), code=307))
-        
-@app.route("/uploads/<filename>")
-def uploaded_file(filename):
-     retuasdfrn(send_from_directory(app.config['UPLOAD_FOLDER'],
-                                filename))
- 
-@app.route("/sketches/<filename>")
-def sketched_file(filename):
-    return(send_from_directory(app.config['SKETCH_FOLDER'],
-                               filename))
 
 @app.route("/about")
 def about():
