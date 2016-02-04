@@ -33,11 +33,11 @@ def upload(bucket, folder):
                                        ACL='public-read')
         return(upload_filename)
 
-def s3_url(fname, bucket, folder):
-    return("https://{bucket}.s3.amazonaws.com/{folder}/{fname}".format(
-        bucket = bucket,
-        folder = folder,
-        fname  = fname))
+def s3_url(filename, bucket, folder):
+    return("https://{bucket}.s3.amazonaws.com/{folder}/{filename}".format(
+        bucket  = bucket,
+        folder  = folder,
+        filename = filename))
 
 def sketch(filename):
     sketch_name = os.path.join(app.config['UPLOAD_FOLDER'], filename)
