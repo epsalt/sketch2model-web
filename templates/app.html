@@ -27,9 +27,9 @@
 {% if uploaded_image is defined %}
 <h2>Step 2: Convert your Sketch to a Model! </h2>
 <div class="imgwrapper">
-  {% if sketched_image is not defined %}
+  {% if model_image is not defined %}
   <form action="" method="get">
-    <button id="sketch" type="submit" name="sketch_button" value="sketch" onclick="show_loading();">
+    <button id="model" type="submit" name="model_button" value="true" onclick="show_loading();">
       <i class="fa fa-cube"></i>  Model Your Sketch!
     </button>
     <button id="loading">
@@ -37,13 +37,13 @@
     </button>
   </form>
   {% endif %}
-  {% if sketched_image is defined %}
-  <form action="{{ sketched_image }}" method="get">
+  {% if model_image is defined %}
+  <form action="{{ model_image }}" method="get">
     <button class="hiddenbutton" type="submit">
       <i class="fa fa-download"></i>  Download Your Model
     </button>
   </form>
-  <img src="{{ sketched_image }}">
+  <img src="{{ model_image }}">
   {% endif %}
 </div>
 {% endif %}

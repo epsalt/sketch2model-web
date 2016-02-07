@@ -73,10 +73,10 @@ def uploaded(filename):
     model_url  = s3_url(filename, bucket, model_folder)
     
     if request.method == 'GET':
-        if request.args.get('sketch_button'):
+        if request.args.get('model_button'):
             model(filename, bucket, upload_folder, model_folder)
             return(render_template("app.html", uploaded_image = upload_url,
-                                   sketched_image=model_url))
+                                   model_image=model_url))
         else:
             return(render_template("app.html", uploaded_image = upload_url))
 
