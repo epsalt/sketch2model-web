@@ -1,11 +1,13 @@
 body { font-family: "Open Sans", sans-serif;
        margin: 0 0 0 0;
-       text-align: center;}
+       text-align: center;
+     }
 
 .banner {
     padding: 25px 0 25px 0;
     margin: 0 0 20px 0;
-    background-color: #eee; }
+    background-color: #eee;
+}
 
 .content {
     margin: 0 auto 60px;
@@ -19,14 +21,14 @@ h1 > a {
     color: black
 }
 h2, h3 { font-size: 30px;
-         margin: 0 0 10px 0
+         margin: 0 0 10px 0;
        }
 a  { color: #4078c0;
      text-decoration: none;
    }
 p { text-align: justify;
     text-justify: inter-word;
-    font-size: 20px
+    font-size: 20px;
   }
 
 .fileupload {
