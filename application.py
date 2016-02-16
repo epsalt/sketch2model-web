@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['S3_BUCKET'] = 'sketch2model'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MODEL_FOLDER'] = 'models'
-ALLOWED_EXTENSIONS = set(['jpg', 'png'])
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'gif', 'png'])
 
 ## Helper functions
 def allowed_file(filename):
