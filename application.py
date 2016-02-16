@@ -32,8 +32,7 @@ def upload(bucket, folder):
 def s3_put(file, filename, bucket, folder):
     s3 = resource('s3')
     s3.Object(bucket, folder + '/' + filename).put(Body=file,
-                                                   ContentType='image/jpeg',
-                                                   ACL='public-read')
+                                                   ContentType='image/jpeg')
 
 def s3_get(filename, bucket, folder):
     s3 = resource('s3')
