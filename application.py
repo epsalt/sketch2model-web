@@ -103,7 +103,9 @@ def uploaded(filename):
             return(render_template("app.html", uploaded_image=upload_url))
 
     elif request.method == 'POST':
-        return(redirect(url_for('index'), code=307))
+        filename = upload(app.config['S3_BUCKET'],
+                          app.config['UPLOAD_FOLDER'])
+        return(redirect(url_for('uploaded', filename=filename)))
 
 
 @app.route("/about")
