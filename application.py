@@ -1,9 +1,13 @@
 import os
-from boto3 import resource
 import time
+
+from sketch2model.segment_5 import sketch2model
+from utils.orientation import normalize_image_orientation
+
+from boto3 import resource
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug import secure_filename
-from sketch2model.segment_5 import sketch2model
+
 
 app = Flask(__name__)
 app.config['S3_BUCKET'] = 'sketch2model'
@@ -33,6 +37,10 @@ def upload(bucket, folder):
         extension = os.path.splitext(filename)[1]
         upload_filename = generate_filename() + extension
 
+        # Normalize jpegs with orientation tags
+        if extension == ("jpeg" or "jpg"):
+            file = normalize_image_orientation(file)
+            
         # Upload image to s3
         s3_put(file, upload_filename, bucket, folder)
         return(upload_filename)
