@@ -1,5 +1,6 @@
 import os
 import time
+import logging
 
 from sketch2model.segment_5 import sketch2model
 from utils.orientation import normalize_image_orientation
@@ -40,9 +41,11 @@ def upload(bucket, folder):
         # Normalize jpegs with orientation tags
         if extension == ("jpeg" or "jpg"):
             file = normalize_image_orientation(file)
-            
-        # Upload image to s3
-        s3_put(file, upload_filename, bucket, folder)
+            s3_put(file, upload_filename, bucket, folder)
+            file.close()
+        else:
+            s3_put(file, upload_filename, bucket, folder)
+        
         return(upload_filename)
 
 
@@ -120,5 +123,18 @@ def uploaded(filename):
 def about():
     return(render_template("about.html"))
 
+@app.errorhandler(500)
+def internal_server_error(error):
+    app.logger.error('Server Error: %s', error)
+    return(render_template('500.html'), 500)
+
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    app.logger.error('Unhandled Exception: %s', e)
+    return(render_template('500.html'), 500)
+
 if __name__ == "__main__":
+    logging.basicConfig(filename="error.log", level=logging.DEBUG)
     app.run()
+
+
