@@ -1,7 +1,10 @@
-# -*- mode: gitignore; -*-
-assets/
-sketches/
-*~
+# Folders
 venv/
-.\#*
-\#*\#
+
+# Logs
+*.log
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

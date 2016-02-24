@@ -2,15 +2,15 @@ import os
 import time
 import logging
 
+from sketch2model_web import app
 from sketch2model.segment_5 import sketch2model
 from utils.orientation import normalize_image_orientation
 
 from boto3 import resource
-from flask import Flask, render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for
 from werkzeug import secure_filename
 
 
-app = Flask(__name__)
 app.config['S3_BUCKET'] = 'sketch2model'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MODEL_FOLDER'] = 'models'
@@ -132,9 +132,4 @@ def internal_server_error(error):
 def unhandled_exception(e):
     app.logger.error('Unhandled Exception: %s', e)
     return(render_template('500.html'), 500)
-
-if __name__ == "__main__":
-    logging.basicConfig(filename="error.log", level=logging.DEBUG)
-    app.run()
-
 
