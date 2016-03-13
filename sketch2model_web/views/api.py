@@ -1,7 +1,5 @@
 from sketch2model_web import app
-from flask import request, jsonify
-from base64 import b64encode, b64decode
-from io import BytesIO
+from flask import request, jsonify, make_response
 
 from sketch2model_web.sketch2model.segment_5 import sketch2model
 
@@ -18,12 +16,14 @@ def api_heartbeat():
     return jsonify(result)
 
 
-@app.route("/api/sketch2model")
+@app.route("/api/sketch2model", methods=['POST'])
 def api_sketch2model():
-    """Main API view. Takes an image and runs  """
+    """Main API: Takes an image, runs sketch2model image processing and
+    returns model as a png image"""
 
     try:
-        sketch = b64decode(request.args.get('sketch'))
+        ## Add more validation here
+        sketch = request.files['sketch']
     except Exception as e:
         app.logger.error('API Sketch Error: %s', e)
         result = {
@@ -33,11 +33,9 @@ def api_sketch2model():
         return jsonify(result)
 
     try:
-        buf = BytesIO()
-        buf.write(sketch)
-        buf.seek(0)
-        model = sketch2model(buf).getvalue()
-        model_b64 = b64encode(model).decode('utf-8')
+        model = sketch2model(sketch)
+        response = make_response(model.getvalue())
+        response.mimetype = 'image/png'
 
     except Exception as e:
         app.logger.error('API Sketch2Model Error: %s', e)
@@ -47,8 +45,4 @@ def api_sketch2model():
         }
         return jsonify(result)
 
-    result = {
-        'ok': True,
-        'model': model_b64
-    }
-    return(jsonify(result))
+    return(response)
