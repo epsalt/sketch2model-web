@@ -1,48 +1,51 @@
 from sketch2model_web import app
-from flask import request, jsonify, make_response
+from flask import request, jsonify, json
 
-from sketch2model_web.sketch2model.segment_5 import sketch2model
-
+from sketch2model_web.sketch2model.image_processing import Sketch2Model
+from sketch2model_web.utils import load_img, upload, array_to_img, s3_url
 
 @app.route("/api/heartbeat")
 def api_heartbeat():
     """Health check for the API"""
-
     result = {
         "ok": True,
         "error": ""
     }
+    return(jsonify(result))
 
-    return jsonify(result)
-
-
-@app.route("/api/sketch2model", methods=['POST'])
+@app.route("/api")
 def api_sketch2model():
-    """Main API: Takes an image, runs sketch2model image processing and
-    returns model as a png image"""
+    try:
+        url = request.args['url']
+    except Exception as e:
+        result = {
+            "ok": False,
+            "error": "url parameter not found"
+        }
+        return(jsonify(result))
 
     try:
-        ## Add more validation here
-        sketch = request.files['sketch']
-    except Exception as e:
-        app.logger.error('API Sketch Error: %s', e)
+        img = load_img(url)
+    except OSError as e:
         result = {
-            'ok': False,
-            'error': 'sketch not found or could not be opened'
-        }
-        return jsonify(result)
-
+            "ok": False,
+            "error": "could not open image file"
+            }
+        return(jsonify(result))
     try:
-        model = sketch2model(sketch)
-        response = make_response(model.getvalue())
-        response.mimetype = 'image/png'
+        model = Sketch2Model(load_img(url))
+        fname = upload(array_to_img(model.final), model = True)
+        out_url = s3_url(fname, model = True)
 
-    except Exception as e:
-        app.logger.error('API Sketch2Model Error: %s', e)
         result = {
-            'ok': False,
-            'error': 'sketch2model image processing failed'
-        }
-        return jsonify(result)
+            "ok": True,
+            "url": out_url
+            }
 
-    return(response)
+        return(jsonify(result))
+    except Exception as e:
+        result = {
+            "ok": False,
+            "error": "image processing failed"
+            }
+        return(jsonify(result))

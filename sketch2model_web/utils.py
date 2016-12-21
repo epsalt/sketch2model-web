@@ -1,47 +1,47 @@
-import os
+import requests
+import io
+import PIL
 import time
 from boto3 import resource
 
 from sketch2model_web import app
-from sketch2model_web.sketch2model.segment_5 import sketch2model
-from sketch2model_web.orientation import normalize_image_orientation
+from matplotlib import cm, colors
 
-def s3_url(filename, bucket, folder):
+bucket = app.config['S3_BUCKET']
+upload_folder = app.config['UPLOAD_FOLDER']
+model_folder = app.config['MODEL_FOLDER']
+
+## Change to class based storing of urls / fnames
+def s3_url(fname, model):
     """Builds a S3 object URL from components."""
-    return "https://{bucket}.s3.amazonaws.com/{folder}/{filename}".format(
-        bucket=bucket,
-        folder=folder,
-        filename=filename)
+    folder = (model_folder if model else upload_folder)
+    return "https://{bucket}.s3.amazonaws.com/{folder}/{filename}".format(bucket=bucket, folder=folder, filename=fname)
 
 def generate_filename():
     """Generates a storage filename based on system time. Filenames
     are not random. Names match for both sketch and model."""
     return str(round(time.time(), 1)).replace(".", "")
 
-def upload_sketch(file, ext, bucket, folder):
+def upload(f, model, ext = ".png"):
+    folder = (model_folder if model else upload_folder)
+    fname = generate_filename() + ext
+    resource('s3').Object(bucket, folder + '/'+fname).put(Body=f, ContentType='image/png')
+    return fname
 
-    new_filename = generate_filename() + '.' + ext
-    s3 = resource('s3').Object(bucket, folder + '/' + new_filename)
-    
-    # Normalize jpegs with orientation tags
-    if ext == ("jpeg" or "jpg"):
-        file = normalize_image_orientation(file)
-        s3.put(Body = file, ContentType = 'image/jpeg')
-        file.close()
-    else:
-        s3.put(Body = file, ContentType = 'image/jpeg')
+def load_img(url):
+    url = requests.utils.unquote(url)
+    response = requests.get(url)
+    img = PIL.Image.open(io.BytesIO(response.content))
+    return img
 
-    return(new_filename)
+def array_to_img(a, format="PNG", cmap=cm.nipy_spectral):
+    ## Normalize color map to data
+    norm = colors.Normalize(vmin = a.min(), vmax=a.max())
+    norm_color_map = cm.ScalarMappable(norm=norm, cmap=cmap)
 
-def model_sketch(filename, bucket, upload_folder, model_folder):
-    """Pulls sketch image from S3, runs sketch2model image processing
-    on the image and then uploads result to S3."""
-    s3 = resource('s3')
-    
-    s3_upload = s3.Object(bucket, upload_folder + '/' + filename)    
-    sketch = s3_upload.get()['Body']
-
-    s3_model = s3.Object(bucket, model_folder + '/' + filename)
-    model_object = sketch2model(sketch)
-    s3_model.put(Body=model_object, ContentType='image/jpeg') 
-    model_object.close()
+    ## Convert image from array and save to buffer
+    im = PIL.Image.fromarray(norm_color_map.to_rgba(a, bytes=True))
+    buf = io.BytesIO()
+    im.save(buf, format=format)
+    buf.seek(0)
+    return buf
