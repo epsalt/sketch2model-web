@@ -24,12 +24,14 @@ def uploaded(fname):
             ## Use our own api to run sketch2model on input image
             uploaded_url = s3_url(fname, model = False)
             r = requests.get(url_for('api_sketch2model', _external=True),
-                             params={"url": uploaded_url})
-            
-            model_url = r.json()["url"]
-            return render_template("app.html",
-                uploaded_image=s3_url(fname, model = False),
-                model_image=model_url)
+                             params={"url": uploaded_url}).json()
+            if(r["ok"] == True):
+                model_url = r["url"]
+                return render_template("app.html",
+                                       uploaded_image=s3_url(fname, model = False),
+                                       model_image=model_url)
+            else:
+                return render_template_string(r["error"])
         else:
             upload_url = s3_url(fname, model = False)
             return render_template("app.html", uploaded_image=upload_url)

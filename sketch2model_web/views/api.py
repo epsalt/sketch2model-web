@@ -23,7 +23,6 @@ def api_sketch2model():
             "error": "url parameter not found"
         }
         return(jsonify(result))
-
     try:
         img = load_img(url)
     except OSError as e:
@@ -34,14 +33,18 @@ def api_sketch2model():
         return(jsonify(result))
     try:
         model = Sketch2Model(load_img(url))
-        fname = upload(array_to_img(model.final), model = True)
-        out_url = s3_url(fname, model = True)
-
-        result = {
-            "ok": True,
-            "url": out_url
+        if(model.nregions == 1):
+            result = {
+                "ok": False,
+                "error": "only identified one region in input image, try tuning parameters or simplify input image"
             }
-
+        else:
+            fname = upload(array_to_img(model.final), model = True)
+            out_url = s3_url(fname, model = True)
+            result = {
+                "ok": True,
+                "url": out_url
+            }
         return(jsonify(result))
     except Exception as e:
         result = {

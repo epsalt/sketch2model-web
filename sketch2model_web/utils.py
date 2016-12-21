@@ -18,14 +18,13 @@ def s3_url(fname, model):
     return "https://{bucket}.s3.amazonaws.com/{folder}/{filename}".format(bucket=bucket, folder=folder, filename=fname)
 
 def generate_filename():
-    """Generates a storage filename based on system time. Filenames
-    are not random. Names match for both sketch and model."""
+    """Generates a storage filename based on system time"""
     return str(round(time.time(), 1)).replace(".", "")
 
 def upload(f, model, ext = ".png"):
     folder = (model_folder if model else upload_folder)
     fname = generate_filename() + ext
-    resource('s3').Object(bucket, folder + '/'+fname).put(Body=f, ContentType='image/png')
+    resource('s3').Object(bucket, folder + '/'+ fname).put(Body=f, ContentType='image/png')
     return fname
 
 def load_img(url):
