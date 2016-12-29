@@ -11,15 +11,22 @@ bucket = app.config['S3_BUCKET']
 upload_folder = app.config['UPLOAD_FOLDER']
 model_folder = app.config['MODEL_FOLDER']
 
-## Change to class based storing of urls / fnames
-def s3_url(fname, model):
-    """Builds a S3 object URL from components."""
-    folder = (model_folder if model else upload_folder)
-    return "https://{bucket}.s3.amazonaws.com/{folder}/{filename}".format(bucket=bucket, folder=folder, filename=fname)
+class S3_URL:
+    def __init__(self, fname):
+        self.fname = fname
+        self.bucket = bucket
+        self.upload_folder = upload_folder
+        self.model_folder = model_folder
 
-def generate_filename():
-    """Generates a storage filename based on system time"""
-    return str(round(time.time(), 1)).replace(".", "")
+    def uploaded(self):
+        s = "https://{bucket}.s3.amazonaws.com/{folder}/{filename}"
+        return s.format(bucket=self.bucket, folder=self.upload_folder, filename=self.fname)
+    
+    def modeled(self):
+        s = "https://{bucket}.s3.amazonaws.com/{folder}/{filename}"
+        return s.format(bucket=self.bucket, folder=self.model_folder, filename=self.fname)
+
+def generate_filename(): return str(round(time.time(), 1)).replace(".", "")
 
 def upload(f, model, ext = ".png"):
     folder = (model_folder if model else upload_folder)

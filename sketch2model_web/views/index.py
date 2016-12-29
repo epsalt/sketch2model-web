@@ -3,7 +3,7 @@ from werkzeug import secure_filename
 import requests
 
 from sketch2model_web import app
-from sketch2model_web.utils import upload, s3_url
+from sketch2model_web.utils import upload, S3_URL
 
 from sketch2model_web.sketch2model.image_processing import Sketch2Model
 from sketch2model_web.utils import load_img, upload, array_to_img
@@ -22,19 +22,19 @@ def uploaded(fname):
     if request.method == 'GET':
         if request.args.get('model_button'):
             ## Use our own api to run sketch2model on input image
-            uploaded_url = s3_url(fname, model = False)
+            url = S3_URL(fname)
             r = requests.get(url_for('api_sketch2model', _external=True),
-                             params={"url": uploaded_url}).json()
+                             params={"url": url.uploaded()}).json()
             if(r["ok"] == True):
-                model_url = r["url"]
+                modeled_url = r["url"]
                 return render_template("app.html",
-                                       uploaded_image=s3_url(fname, model = False),
-                                       model_image=model_url)
+                                       uploaded_image=url.uploaded(),
+                                       model_image=modeled_url)
             else:
                 return render_template_string(r["error"])
         else:
-            upload_url = s3_url(fname, model = False)
-            return render_template("app.html", uploaded_image=upload_url)
+            url = S3_URL(fname)
+            return render_template("app.html", uploaded_image=url.uploaded())
 
     elif request.method == 'POST':
         f = request.files.get('uploaded_file')
@@ -44,10 +44,3 @@ def uploaded(fname):
 @app.route("/about")
 def about():
     return render_template("about.html")
-
-@app.route("/test")
-def test():
-    r = requests.get(url_for('api_heartbeat', _external=True))
-    data = r.json()
-    test = data["ok"]
-    return render_template_string(str(test))

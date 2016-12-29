@@ -2,7 +2,7 @@ from sketch2model_web import app
 from flask import request, jsonify, json
 
 from sketch2model_web.sketch2model.image_processing import Sketch2Model
-from sketch2model_web.utils import load_img, upload, array_to_img, s3_url
+from sketch2model_web.utils import load_img, upload, array_to_img, S3_URL
 
 @app.route("/api/heartbeat")
 def api_heartbeat():
@@ -40,10 +40,10 @@ def api_sketch2model():
             }
         else:
             fname = upload(array_to_img(model.final), model = True)
-            out_url = s3_url(fname, model = True)
+            url = S3_URL(fname)
             result = {
                 "ok": True,
-                "url": out_url
+                "url": url.modeled()
             }
         return(jsonify(result))
     except Exception as e:
