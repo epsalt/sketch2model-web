@@ -32,10 +32,22 @@ def load_img(url):
     img = PIL.Image.open(io.BytesIO(response.content))
     return img
 
-def array_to_img(a, format="PNG", cmap=cm.nipy_spectral):
+def array_to_img(a, cmap, format="PNG"):
     ## Normalize color map to data
+
+    cmap_dict = {
+        "Accent": cm.Accent,
+        "Dark2": cm.Dark2,
+        "Paired": cm.Paired,
+        "Pastel1": cm.Pastel1,
+        "Paste2": cm.Pastel2,
+        "Set1": cm.Set1,
+        "Set2": cm.Set2,
+        "Set3": cm.Set3
+    }
+
     norm = colors.Normalize(vmin = a.min(), vmax=a.max())
-    norm_color_map = cm.ScalarMappable(norm=norm, cmap=cmap)
+    norm_color_map = cm.ScalarMappable(norm=norm, cmap=cmap_dict.get(cmap))
 
     ## Convert image from array and save to buffer
     im = PIL.Image.fromarray(norm_color_map.to_rgba(a, bytes=True))

@@ -17,6 +17,9 @@ def api_heartbeat():
 def api_sketch2model():
     try:
         url = request.args['url']
+        contrast = float(request.args['contrast'])
+        closing = int(request.args['closing'])
+        cmap = request.args['cmap']
     except Exception as e:
         result = {
             "ok": False,
@@ -32,14 +35,16 @@ def api_sketch2model():
             }
         return(jsonify(result))
     try:
-        model = Sketch2Model(load_img(url))
+        model = Sketch2Model(load_img(url),
+                             contrast=contrast,
+                             closing=closing)
         if(model.nregions == 1):
             result = {
                 "ok": False,
                 "error": "only identified one region in input image, try tuning parameters or simplify input image"
             }
         else:
-            fname = upload(array_to_img(model.final), model = True)
+            fname = upload(array_to_img(model.final, cmap), model = True)
             url = s3_url(fname)
             result = {
                 "ok": True,
@@ -49,6 +54,6 @@ def api_sketch2model():
     except Exception as e:
         result = {
             "ok": False,
-            "error": "image processing failed"
+            "error": str(e)
             }
         return(jsonify(result))
