@@ -1,54 +1,115 @@
 {% extends "boilerplate.html" %}
 {% block content %}
 
-<h2>Step 1: Upload your Sketch!</h2>
+<p>Sketch2Model is a python webapp which recognizes closed regions in simple line images.</p>
 
-{% if uploaded_image is not defined %}
-<div class="imgwrapper">
-  <form action="" method=post name="uploadsubmit_button" enctype=multipart/form-data>
-    <input type="file" name="uploaded_file" onchange="this.form.submit()" id="upload" class="fileupload" />
-      <label for="upload"><i class="fa fa-upload"></i> Upload a Sketch</label>
-  </form>
-</div>
-{% endif %}
-  
-{% if uploaded_image is defined %}
-  <div class="imgwrapper">
-    <img src="{{ uploaded_image }}">
-    <form action="" method=post name="uploadsubmit_button" enctype=multipart/form-data>
-      <input type="file" name="uploaded_file" onchange="this.form.submit()" id="upload" class="fileupload" />
-      <label class="hiddenbutton" for="upload"><i class="fa fa-upload"></i> Upload Another Sketch</label>
-    </form>
+<form role="form" method="POST" enctype="multipart/form-data">
+  <div class="row">
+    <div class="col-sm-5">
+      <h2>Image Input</h2>
+
+      <div class="row">
+        <div class="form-group col-sm-12">
+            <label class="radio-inline">
+              <input type="radio" name="options" id="example" value="example" checked>
+              Use an example
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="options" id="upload" value="upload">
+              Upload a sketch
+            </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-6" id="example_form">
+          <select class="form-control" id="examples" name="example">
+            <option>Fault</option>
+            <option>Breaks</option>
+          </select>
+        </div>
+        <div class="form-group" id="upload_form">
+          <div class="col-sm-12">
+            <input type="file" class="form-control" id="upload" name="upload">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-12">
+          <div id="img_container">
+            <img id="img_example" src="https://s3-us-west-2.amazonaws.com/sketch2model/examples/Fault.png"
+                 class="img-rounded" alt="example img" width="250">
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-5">
+      <h2>Parameters</h2>
+
+      <div class="row">
+        <div class="form-group col-sm-7">
+            <label for="contrast" class="control-label">Contrast</label>
+            <input type="number" step="0.1" value="0.5" min="0.0" max="1.0" class="form-control" id="contrast" placeholder="Val" name="contrast"/>
+            <small id="contrastHelp" class="form-text text-muted">How dark text needs to be to be recognized</small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-7">
+          <label for="closing" class="control-label">Closing</label>
+          <input type="number" step="0.1" value="0.5" min="0.0" max="1.0" class="form-control" id="closing" placeholder="Val" name="closing"/>
+          <small id="contrastHelp" class="form-text text-muted">Degree of gap closing between lines</small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-7">
+          <label for="examples" class="control-label">Colormap</label>
+          <select class="form-control" id="cmap" name="cmap">
+            <option>Accent</option>
+            <option>Dark2</option>
+            <option>Paired</option>
+            <option>Pastel1</option>
+            <option>Paste2</option>
+            <option>Set1</option>
+            <option>Set2</option>
+            <option>Set3</option>
+          </select>
+          <small id="contrastHelp" class="form-text text-muted">Which matplotlib colormap to use for output</small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <button type="submit" value="submit" class="btn btn-lg btn-primary">Submit</button>
+        </div>
+      </div>
+
+    </div>
   </div>
-{% endif %}
-  
-<p> Accepted image file types are .jpg, .jpeg, .png, and .gif </p>
+</form>
 
-{% if uploaded_image is defined %}
-<h2>Step 2: Convert your Sketch to a Model! </h2>
-<div class="imgwrapper">
-  {% if model_image is not defined %}
-  <form action="" method="get">
-    <button id="model" type="submit" name="model_button" value="true" onclick="show_loading();">
-      <i class="fa fa-cube"></i>  Model Your Sketch!
-    </button>
-    <button id="loading">
-      <i class="fa fa-cog fa-spin"></i> Modelling...
-    </button>
-  </form>
-  {% endif %}
-  {% if model_image is defined %}
-  <form action="{{ model_image }}" method="get">
-    <button class="hiddenbutton" type="submit">
-      <i class="fa fa-download"></i>  Download Your Model
-    </button>
-  </form>
-  <img src="{{ model_image }}">
-  {% endif %}
+{% if model is defined %}
+
+<h2>Output</h2>
+
+<div class="row">
+  <div class="col-sm-4">
+    <h3>Sketch</h3>
+    <div id="img_container">
+      <img id="img_example" src="{{sketch}}" class="img-rounded" alt="example img" width="250">
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <h3>Model</h3>
+    <div id="img_container">
+      <img id="img_example" src="{{model}}" class="img-rounded" alt="example img" width="250">
+    </div>
+  </div>
 </div>
+
 {% endif %}
-{% if sketched_image is defined %}
-<p> Your Sketch has been Modelled! If it didn't turn out as you expected please check our
-  faq page for some hints on getting a good result. </p>
-{% endif %}
+
 {% endblock %}

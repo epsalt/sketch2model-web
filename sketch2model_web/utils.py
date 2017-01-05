@@ -10,21 +10,13 @@ from matplotlib import cm, colors
 bucket = app.config['S3_BUCKET']
 upload_folder = app.config['UPLOAD_FOLDER']
 model_folder = app.config['MODEL_FOLDER']
+example_folder = app.config['EXAMPLE_FOLDER']
 
-class S3_URL:
-    def __init__(self, fname):
-        self.fname = fname
-        self.bucket = bucket
-        self.upload_folder = upload_folder
-        self.model_folder = model_folder
-
-    def uploaded(self):
-        s = "https://{bucket}.s3.amazonaws.com/{folder}/{filename}"
-        return s.format(bucket=self.bucket, folder=self.upload_folder, filename=self.fname)
-    
-    def modeled(self):
-        s = "https://{bucket}.s3.amazonaws.com/{folder}/{filename}"
-        return s.format(bucket=self.bucket, folder=self.model_folder, filename=self.fname)
+def s3_url(fname):
+    url = "https://{0}.s3.amazonaws.com/{1}/{2}"
+    return {"uploaded": url.format(bucket, upload_folder, fname),
+            "modeled": url.format(bucket, model_folder, fname),
+            "example": url.format(bucket, example_folder, fname)}
 
 def generate_filename(): return str(round(time.time(), 1)).replace(".", "")
 
