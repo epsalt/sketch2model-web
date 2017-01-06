@@ -3,9 +3,9 @@ import io
 import PIL
 import time
 from boto3 import resource
+from matplotlib import cm, colors
 
 from sketch2model_web import app
-from matplotlib import cm, colors
 
 bucket = app.config['S3_BUCKET']
 upload_folder = app.config['UPLOAD_FOLDER']
