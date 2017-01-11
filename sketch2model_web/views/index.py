@@ -40,7 +40,7 @@ def index():
         default_params = {"example": "Breaks",
                           "contrast": 0.5,
                           "closing": 3,
-                          "cmap": "Pastel2",
+                          "cmap": "Paired",
                           "options": "example"}
         return render_template("app.html", default=default_params)
 

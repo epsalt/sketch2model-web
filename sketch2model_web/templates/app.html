@@ -77,9 +77,8 @@
             <div class="form-group col-sm-8">
               <label for="closing" class="control-label">Closing</label>
               <input type="number" step="1" value={{default.closing}} min="1" max="5" class="form-control" id="closing" placeholder="Val" name="closing"/>
-              <small id="contrastHelp" class="form-text text-muted">Degree of gap closing between lines.</small>
-              <br>
-              <small id="contrastHelp" class="form-text text-muted">Decrease value to close larger gaps.</small>
+              <small id="contrastHelp" class="form-text text-muted">Size of morphological structuring element in pixels.</small>
+              <small id="contrastHelp" class="form-text text-muted">Increase value to close larger gaps.</small>
             </div>
           </div>
 
@@ -114,7 +113,7 @@
 
 
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-sm-6">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h2 class="panel-title">Output Model</h2>
@@ -125,6 +124,16 @@
           <div class="col-sm-6">
             <div id="img_container">
               <img id="img_example" src="{{model}}" class="img-rounded" alt="model output">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="alert alert-info">
+              <p>
+              This is your model! Hopefully it turned out alright, if
+              it didn't work out try playing around with the
+              parameters or simplifying the input image to look more
+              like the examples.
+              </p>
             </div>
           </div>
         </div>
