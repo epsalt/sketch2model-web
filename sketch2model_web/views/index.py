@@ -44,11 +44,14 @@ def index():
                           "options": "example"}
         return render_template("app.html", default=default_params)
 
+@app.route("/")
+def intro():
+    return render_template("intro.html")
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
-@app.route("/")
-def intro():
-    return render_template("intro.html")
+@app.route("/api_reference")
+def api_reference():
+    return render_template("api_reference.html")

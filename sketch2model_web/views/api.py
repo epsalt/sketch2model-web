@@ -11,7 +11,7 @@ def api_heartbeat():
         "ok": True,
         "error": ""
     }
-    return jsnify(result)
+    return jsonify(result)
 
 @app.route("/api")
 def api_sketch2model():
@@ -25,6 +25,7 @@ def api_sketch2model():
     except Exception as e:
         result = {
             "ok": False,
+            "url": "",
             "error": "url parameter not found"
         }
         return jsonify(result)
@@ -35,6 +36,7 @@ def api_sketch2model():
     except OSError as e:
         result = {
             "ok": False,
+            "url": "",
             "error": "could not open image file"
             }
         return jsonify(result)
@@ -47,6 +49,7 @@ def api_sketch2model():
         if model.nregions == 1:
             result = {
                 "ok": False,
+                "url": "",
                 "error": "only identified one region in input image, try tuning parameters or simplify input image"
             }
 
@@ -55,13 +58,15 @@ def api_sketch2model():
             url = s3_url(fname)
             result = {
                 "ok": True,
-                "url": url.get("modeled")
+                "url": url.get("modeled"),
+                "error": ""
             }
         return jsonify(result)
 
     except Exception as e:
         result = {
             "ok": False,
+            "url": "",
             "error": str(e)
             }
         return jsonify(result)
