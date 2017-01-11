@@ -2,8 +2,10 @@
 {% block content %}
 
 <div class="row">
-  <div class="col-sm-7">
-    <h2 id="about-sketch2model">About</h2>
+  <div class="col-sm-offset-2 col-sm-8">
+    <div class="page-header">
+      <h1 id="about-sketch2model">About</h1>
+    </div>
     <p>The idea behind sketch2model is that a user should be able to
       easily create forward seismic models. Modeling at the speed of
       imagination, allowing seamless transition from idea to synthetic
@@ -26,7 +28,9 @@
       Python, for reasons nicely articulated by Agile in
       their <a href="http://www.agilegeoscience.com/blog/2016/4/6/why-python-beats-matlab">blog
         post</a>.</p>
-    <h2 id="objective-for-sketch2model">Objective</h2>
+    <div class="page-header">
+      <h2 id="objective-for-sketch2model">Objective</h2>
+    </div>
     <p>Building something mobile to turn a sketch into a synthetic seismic
       section is a pretty tall order for a weekend. We decided to take a
       shortcut by leveraging an existing project: Agile’s online seismic
@@ -48,7 +52,9 @@
       two lines of the sketch, should the algorithm take the sketch as-is
       and interpret a single body? Or fill the small gap and interpret two
       separate bodies?</p>
-    <h2 id="approach">Approach</h2>
+    <div class="page-header">
+      <h2 id="approach">Approach</h2>
+    </div>
     <p>Matteo has used image processing for
       geoscience <a href="https://mycarta.wordpress.com/category/image-processing-2">before</a>,
       so he landed on an approach for our hack almost instantly: binarize to
@@ -79,7 +85,9 @@
       output is a snap. With this final step, we’ve transformed a sketch
       into a png image where each geologic body is a different color. It’s
       ready to become a modelr synthetic section.</p>
-    <h2 id="implementation">Implementation</h2>
+    <div class="page-header">
+      <h2 id="implementation">Implementation</h2>
+    </div>
     <p>Sketch2model was a working prototype by the end of the
       hackathon. It wasn’t the most robust algorithm, but it worked on a
       good proportion of our test images. We were excited enough to continue

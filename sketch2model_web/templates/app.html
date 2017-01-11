@@ -3,133 +3,152 @@
 
 <form role="form" method="post" enctype="multipart/form-data">
   <div class="row">
-    <div class="col-sm-5">
-      <h2>Image Input</h2>
-
-      <div class="row">
-        <div class="form-group col-sm-12">
-            <label class="radio-inline">
-              <input type="radio" name="options" id="example" value="example" {% if default.options=="example" %} checked{% endif %}>
-              Use an example
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="options" id="upload" value="upload" {% if default.options=="upload" %} checked{% endif %}>
-              Upload a sketch
-            </label>
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">Image Input</h2>
         </div>
-      </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <label class="radio-inline">
+                <input type="radio" name="options" id="example" value="example" {% if default.options=="example" %} checked{% endif %}>
+                Use an example
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="options" id="upload" value="upload" {% if default.options=="upload" %} checked{% endif %}>
+                Upload a sketch
+              </label>
+            </div>
+          </div>
 
-      <div class="row">
-        <div class="form-group col-sm-6" id="example_form">
-          <select class="form-control" id="examples" name="example">
-            <option {% if default.example=="Breaks" %} selected="selected"{% endif %}>Breaks</option>
-            <option {% if default.example=="Intrusion" %} selected="selected"{% endif %}>Intrusion</option>
-            <option {% if default.example=="Simple" %} selected="selected"{% endif %}>Simple</option>
-            <option {% if default.example=="Wavey" %} selected="selected"{% endif %}>Wavey</option>
-          </select>
-        </div>
-        <div class="form-group" id="upload_form">
-          <div class="col-sm-6">
-            <input type="file" accept="image/*" class="form-control" id="upload" name="upload" onchange="image_preview(event)">
+          <div class="row">
+            <div class="form-group col-sm-6" id="example_form">
+              <select class="form-control" id="examples" name="example">
+                <option {% if default.example=="Breaks" %} selected="selected"{% endif %}>Breaks</option>
+                <option {% if default.example=="Intrusion" %} selected="selected"{% endif %}>Intrusion</option>
+                <option {% if default.example=="Simple" %} selected="selected"{% endif %}>Simple</option>
+                <option {% if default.example=="Wavey" %} selected="selected"{% endif %}>Wavey</option>
+              </select>
+            </div>
+            <div class="form-group" id="upload_form">
+              <div class="col-sm-6">
+                <input type="file" accept="image/*" class="form-control" id="upload" name="upload" onchange="image_preview(event)">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <div id="img_container">
+                <img id="img_example" src="https://s3-us-west-2.amazonaws.com/sketch2model/examples/{{default.example}}.png"
+                     class="img-rounded" alt="example img" width="250">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <div id="img_container">
+                <img id="img_preview" class="preview img-rounded" width="250">
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="form-group col-sm-12">
-          <div id="img_container">
-            <img id="img_example" src="https://s3-us-west-2.amazonaws.com/sketch2model/examples/{{default.example}}.png"
-                 class="img-rounded" alt="example img" width="250">
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-sm-12">
-          <div id="img_container">
-            <img id="img_preview" class="preview img-rounded" width="250">
-          </div>
-        </div>
-      </div>
-
     </div>
-    <div class="col-sm-5">
-      <h2>Parameters</h2>
 
-      <div class="row">
-        <div class="form-group col-sm-7">
-            <label for="contrast" class="control-label">Contrast</label>
-            <input type="number" step="0.1" value={{default.contrast}} min="0.1" max="0.9" class="form-control" id="contrast" placeholder="Val" name="contrast"/>
-            <small id="contrastHelp" class="form-text text-muted">How dark text needs to be to be recognized.</small>
-            <small id="contrastHelp" class="form-text text-muted">Lower the value to recognize lighter lines.</small>
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">Parameters</h2>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="form-group col-sm-7">
+              <label for="contrast" class="control-label">Contrast</label>
+              <input type="number" step="0.1" value={{default.contrast}} min="0.1" max="0.9" class="form-control" id="contrast" placeholder="Val" name="contrast"/>
+              <small id="contrastHelp" class="form-text text-muted">How dark text needs to be to be recognized.</small>
+              <small id="contrastHelp" class="form-text text-muted">Lower the value to recognize lighter lines.</small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-sm-7">
+              <label for="closing" class="control-label">Closing</label>
+              <input type="number" step="1" value={{default.closing}} min="1" max="5" class="form-control" id="closing" placeholder="Val" name="closing"/>
+              <small id="contrastHelp" class="form-text text-muted">Degree of gap closing between lines.</small>
+              <br>
+              <small id="contrastHelp" class="form-text text-muted">Decrease value to close larger gaps.</small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-sm-7">
+              <label for="examples" class="control-label">Colormap</label>
+              <select class="form-control" id="cmap" name="cmap" value="Dark2">
+                <option {% if default.cmap=="Accent" %} selected="selected"{% endif %}>Accent</option>
+                <option {% if default.cmap=="Dark2" %} selected="selected"{% endif %}>Dark2</option>
+                <option {% if default.cmap=="Paired" %} selected="selected"{% endif %}>Paired</option>
+                <option {% if default.cmap=="Pastel1" %} selected="selected"{% endif %}>Pastel1</option>
+                <option {% if default.cmap=="Pastel2" %} selected="selected"{% endif %}>Pastel2</option>
+                <option {% if default.cmap=="Set1" %} selected="selected"{% endif %}>Set1</option>
+                <option {% if default.cmap=="Set2" %} selected="selected"{% endif %}>Set2</option>
+                <option {% if default.cmap=="Set3" %} selected="selected"{% endif %}>Set3</option>
+              </select>
+              <small id="contrastHelp" class="form-text text-muted">Which matplotlib colormap to use for output</small>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <button type="submit" name="action" value="submit" class="btn btn-lg btn-primary">Submit</button>
+            </div>
+          </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="form-group col-sm-7">
-          <label for="closing" class="control-label">Closing</label>
-          <input type="number" step="1" value={{default.closing}} min="1" max="5" class="form-control" id="closing" placeholder="Val" name="closing"/>
-          <small id="contrastHelp" class="form-text text-muted">Degree of gap closing between lines.</small>
-          <br>
-          <small id="contrastHelp" class="form-text text-muted">Decrease value to close larger gaps.</small>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-sm-7">
-          <label for="examples" class="control-label">Colormap</label>
-          <select class="form-control" id="cmap" name="cmap" value="Dark2">
-            <option {% if default.cmap=="Accent" %} selected="selected"{% endif %}>Accent</option>
-            <option {% if default.cmap=="Dark2" %} selected="selected"{% endif %}>Dark2</option>
-            <option {% if default.cmap=="Paired" %} selected="selected"{% endif %}>Paired</option>
-            <option {% if default.cmap=="Pastel1" %} selected="selected"{% endif %}>Pastel1</option>
-            <option {% if default.cmap=="Pastel2" %} selected="selected"{% endif %}>Pastel2</option>
-            <option {% if default.cmap=="Set1" %} selected="selected"{% endif %}>Set1</option>
-            <option {% if default.cmap=="Set2" %} selected="selected"{% endif %}>Set2</option>
-            <option {% if default.cmap=="Set3" %} selected="selected"{% endif %}>Set3</option>
-          </select>
-          <small id="contrastHelp" class="form-text text-muted">Which matplotlib colormap to use for output</small>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-6">
-          <button type="submit" name="action" value="submit" class="btn btn-lg btn-primary">Submit</button>
-        </div>
-      </div>
-
     </div>
   </div>
 </form>
 
 {% if model is defined %}
 
-<h2>Output</h2>
-
-<div class="row">
-  <div class="col-sm-4">
-    <h3>Sketch</h3>
-    <div id="img_container">
-      <img id="img_example" src="{{sketch}}" class="img-rounded" alt="example img" width="250">
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <h3>Model</h3>
-    <div id="img_container">
-      <img id="img_example" src="{{model}}" class="img-rounded" alt="example img" width="250">
-    </div>
-  </div>
-</div>
-
-{% endif %}
-
-{% if error is defined %}
 <div class="row">
   <div class="col-sm-12">
-    <h2>Output</h2>
-    <p class="text-danger">ERROR: {{error}}</p>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h2 class="panel-title">Output</h2>
+      </div>
+      <div class="panel-body">
+
+        <div class="row">
+          <div class="col-sm-6">
+            <h3>Sketch</h3>
+            <div id="img_container">
+              <img id="img_example" src="{{sketch}}" class="img-rounded" alt="example img" width="250">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <h3>Model</h3>
+            <div id="img_container">
+              <img id="img_example" src="{{model}}" class="img-rounded" alt="example img" width="250">
+            </div>
+          </div>
+        </div>
+
+        {% endif %}
+
+        {% if error is defined %}
+        <div class="row">
+          <div class="col-sm-12">
+            <h2>Output</h2>
+            <div class="alert alert-danger">ERROR: {{error}}</div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
-{% endif %}
 
 {% endblock %}
