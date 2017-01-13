@@ -11,6 +11,7 @@ bucket = app.config['S3_BUCKET']
 upload_folder = app.config['UPLOAD_FOLDER']
 model_folder = app.config['MODEL_FOLDER']
 example_folder = app.config['EXAMPLE_FOLDER']
+allowed_extensions = app.config['ALLOWED_EXTENSIONS']
 
 def s3_url(fname):
     url = "https://{0}.s3.amazonaws.com/{1}/{2}"
@@ -21,10 +22,13 @@ def s3_url(fname):
 def generate_filename(): return str(round(time.time(), 1)).replace(".", "")
 
 def upload(f, model, ext = ".png"):
-    folder = (model_folder if model else upload_folder)
-    fname = generate_filename() + ext
-    resource('s3').Object(bucket, folder + '/'+ fname).put(Body=f, ContentType='image/png')
-    return fname
+    if not model and not allowed_file(f.filename):
+            raise ValueError
+    else:
+        folder = (model_folder if model else upload_folder)
+        fname = generate_filename() + ext
+        resource('s3').Object(bucket, folder + '/'+ fname).put(Body=f, ContentType='image/png')
+        return fname
 
 def load_img(url):
     url = requests.utils.unquote(url)
@@ -55,3 +59,7 @@ def array_to_img(a, cmap, format="PNG"):
     im.save(buf, format=format)
     buf.seek(0)
     return buf
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in allowed_extensions

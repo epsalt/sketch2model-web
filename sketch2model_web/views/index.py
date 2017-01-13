@@ -1,4 +1,4 @@
-from flask import render_template, render_template_string, redirect, request, url_for
+from flask import redirect, render_template, request, url_for
 import requests
 
 from sketch2model_web import app
@@ -16,7 +16,17 @@ def index():
 
         else:
             f = request.files['upload']
-            fname = upload(f, model=False)
+            if f.filename == "":
+                return render_template("app.html", error="No selected file",
+                                       default=form)
+
+            try:
+                fname = upload(f, model=False)
+            except ValueError:
+                return render_template("app.html",
+                                       error="Sketch2Model does not accept this filetype, try again with jpg, gif or png",
+                                       default=form)
+
             url = s3_url(fname).get('uploaded')
 
         payload = {"url": url,
