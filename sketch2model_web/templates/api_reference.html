@@ -1,0 +1,102 @@
+{% extends "boilerplate.html" %}
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-offset-2 col-sm-8">
+
+    <div class="page-header">
+      <h2>Sketch2Model API Reference</h2>
+    </div>
+
+    <h3>Authentication</h3>
+    <p>
+      The Sketch2Model API has no form of authentication required at
+      the moment, so please be nice and rate limit your requests to
+      something reasonable.
+    </p>
+
+    <h3>Heartbeat API</h3>
+    <p>
+      Query the heartbeat to check if the Sketch2Model API is
+      currently up and running.
+    </p>
+    <p>
+    <code>http://www.sketch2model.com/api/heartbeat</code>
+    </p>
+    <pre><code>
+    <strong>Parameters</strong>
+    None
+
+    <strong>Response</strong>
+    ok - success returns True, failure returns False
+    error - success returns "", failure returns error details
+    </code></pre>
+    <pre><code>
+    <strong>Example Query - Python</strong>
+    import requests
+
+    r = requests.get("http://www.sketch2model.com/api/heartbeat")
+
+    r.status_code
+    >> 200
+
+    r.json()
+    >> {'ok': True, 'error': ''}
+    </code></pre>
+
+    <h3>Main Sketch2Model API</h3>
+    <p>
+      This is the primary image processing workhorse behind
+      Sketch2Model. Given an input image it will run the server side
+      scikit-image image processing code and return a the url of a
+      model image hosted on s3. Please note that images are only
+      hosted temporarily.
+    </p>
+    <p>
+      <code>http://www.sketch2model.com/api</code>
+    </p>
+    <pre><code>
+    <strong>Parameters</strong>
+    url - input image url
+    contrast - contrast parameter value 0.1 to 0.9
+    closing - closing parameter value 1 to 5
+    cmap - matplotlib quantitative colormap from <a href="http://matplotlib.org/examples/color/colormaps_reference.html">set</a>
+
+    <strong>Response</strong>
+    ok - success returns True, failure returns False
+    url - success returns hosted model url, failure returns ""
+    error - success returns "", failure returns some error details
+    <code></pre>
+    <pre><code>
+    <strong>Example Query - Python</strong>
+    import requests
+
+    url = "https://s3-us-west-2.amazonaws.com/sketch2model/examples/Simple.png"
+    contrast = "0.5"
+    closing = "3"
+    cmap = "Pastel2"
+
+    payload = {
+        "url": url,
+        "contrast": contrast,
+        "closing": closing,
+        "cmap": cmap
+    }
+
+    headers = {"Accept": "application/json"}
+
+    r = requests.get("http://www.sketch2model.com/api/heartbeat",
+                     headers=headers,
+                     params=payload)
+
+    r.status_code
+    >> 200
+
+    r.json
+    >> {'ok': True, 'error': '', url:'output_url_string'}
+    </code></pre>
+  </div>
+</div>
+
+
+{% endblock %}

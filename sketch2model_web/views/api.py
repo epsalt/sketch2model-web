@@ -1,48 +1,72 @@
 from sketch2model_web import app
-from flask import request, jsonify, make_response
+from flask import request, jsonify
 
-from sketch2model_web.sketch2model.segment_5 import sketch2model
-
+from sketch2model_web.sketch2model.image_processing import Sketch2Model
+from sketch2model_web.utils import load_img, upload, array_to_img, s3_url
 
 @app.route("/api/heartbeat")
 def api_heartbeat():
     """Health check for the API"""
-
     result = {
         "ok": True,
         "error": ""
     }
-
     return jsonify(result)
 
-
-@app.route("/api/sketch2model", methods=['POST'])
+@app.route("/api")
 def api_sketch2model():
-    """Main API: Takes an image, runs sketch2model image processing and
-    returns model as a png image"""
 
     try:
-        ## Add more validation here
-        sketch = request.files['sketch']
+        url = request.args['url']
+        contrast = float(request.args['contrast'])
+        closing = int(request.args['closing'])
+        cmap = request.args['cmap']
+
     except Exception as e:
-        app.logger.error('API Sketch Error: %s', e)
         result = {
-            'ok': False,
-            'error': 'sketch not found or could not be opened'
+            "ok": False,
+            "url": "",
+            "error": "url parameter not found"
         }
         return jsonify(result)
 
     try:
-        model = sketch2model(sketch)
-        response = make_response(model.getvalue())
-        response.mimetype = 'image/png'
+        img = load_img(url)
 
-    except Exception as e:
-        app.logger.error('API Sketch2Model Error: %s', e)
+    except OSError as e:
         result = {
-            'ok': False,
-            'error': 'sketch2model image processing failed'
-        }
+            "ok": False,
+            "url": "",
+            "error": "could not open image file"
+            }
         return jsonify(result)
 
-    return(response)
+    try:
+        model = Sketch2Model(load_img(url),
+                             contrast=contrast,
+                             closing=closing)
+
+        if model.nregions == 1:
+            result = {
+                "ok": False,
+                "url": "",
+                "error": "only identified one region in input image, try tuning parameters or simplify input image"
+            }
+
+        else:
+            fname = upload(array_to_img(model.final, cmap), model = True)
+            url = s3_url(fname)
+            result = {
+                "ok": True,
+                "url": url.get("modeled"),
+                "error": ""
+            }
+        return jsonify(result)
+
+    except Exception as e:
+        result = {
+            "ok": False,
+            "url": "",
+            "error": str(e)
+            }
+        return jsonify(result)

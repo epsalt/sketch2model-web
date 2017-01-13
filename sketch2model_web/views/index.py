@@ -1,48 +1,67 @@
-from flask import render_template, request, redirect, url_for
-from werkzeug import secure_filename
+from flask import redirect, render_template, request, url_for
+import requests
 
 from sketch2model_web import app
-from sketch2model_web.utils import s3_url, model_sketch, upload_sketch
+from sketch2model_web.utils import upload, s3_url
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/app", methods=['GET', 'POST'])
 def index():
+
     if request.method == 'POST':
-        file = request.files.get('uploaded_file')
-        ext = secure_filename(file.filename).rsplit('.', 1)[1]        
-        if ext in app.config['ALLOWED_EXTENSIONS']:
-            new_filename = upload_sketch(file, ext,
-                                         app.config['S3_BUCKET'],
-                                         app.config['UPLOAD_FOLDER'])
-        return redirect(url_for('uploaded', filename=new_filename))
-    else:
-        return render_template("app.html")
+        form = request.form
 
-@app.route("/uploaded/<filename>", methods=['GET', 'POST'])
-def uploaded(filename):
-    upload_url = s3_url(filename, app.config['S3_BUCKET'],
-                        app.config['UPLOAD_FOLDER'])
-    model_url = s3_url(filename, app.config['S3_BUCKET'],
-                       app.config['MODEL_FOLDER'])
+        if form.get("options") == "example":
+            ex_name = form.get("example")
+            url = s3_url(ex_name + ".png").get('example')
 
-    if request.method == 'GET':
-        if request.args.get('model_button'):
-            model_sketch(filename, app.config['S3_BUCKET'],
-                         app.config['UPLOAD_FOLDER'],
-                         app.config['MODEL_FOLDER'])
-            return render_template("app.html", uploaded_image=upload_url,
-                                   model_image=model_url)
         else:
-            return render_template("app.html", uploaded_image=upload_url)
+            f = request.files['upload']
+            if f.filename == "":
+                return render_template("app.html", error="No selected file",
+                                       default=form)
 
-    elif request.method == 'POST':
-        file = request.files.get('uploaded_file')
-        ext = secure_filename(file.filename).rsplit('.', 1)[1]        
-        if ext in app.config['ALLOWED_EXTENSIONS']:
-            new_filename = upload_sketch(file, ext,
-                                         app.config['S3_BUCKET'],
-                                         app.config['UPLOAD_FOLDER'])
-        return redirect(url_for('uploaded', filename=new_filename))
+            try:
+                fname = upload(f, model=False)
+            except ValueError:
+                return render_template("app.html",
+                                       error="Sketch2Model does not accept this filetype, try again with jpg, gif or png",
+                                       default=form)
+
+            url = s3_url(fname).get('uploaded')
+
+        payload = {"url": url,
+                   "example": form.get("example"),
+                   "contrast": form.get("contrast"),
+                   "closing": form.get("closing"),
+                   "cmap": form.get("cmap")}
+
+        r = requests.get(url_for('api_sketch2model', _external=True),
+                        params=payload).json()
+
+        if r['ok'] == True:
+            return render_template("app.html", sketch=url, model=r["url"],
+                                   default=form)
+
+        else:
+            return render_template("app.html", error=r["error"],
+                                   default=form)
+
+    else:
+        default_params = {"example": "Breaks",
+                          "contrast": 0.5,
+                          "closing": 3,
+                          "cmap": "Paired",
+                          "options": "example"}
+        return render_template("app.html", default=default_params)
+
+@app.route("/")
+def intro():
+    return render_template("intro.html")
 
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+@app.route("/api_reference")
+def api_reference():
+    return render_template("api_reference.html")

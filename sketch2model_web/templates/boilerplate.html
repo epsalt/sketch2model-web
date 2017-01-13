@@ -1,23 +1,43 @@
 <!doctype html>
 <html lang="en-US">
-<head>  
-  <title>Sketch2Model</title>
-  <meta name="Description" content="Easily turn a whiteboard drawing into a color block model.">
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-  <script src="{{ url_for('static', filename='loading.js') }}"></script>
-  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-</head>
-<div class="banner">
-  <h1><a href="/">Sketch2Model</a></h1>
-  <h2>
-    <a class="ref" href="/about">about</a> &bull;
-    <a class="ref" href="/faq">faq</a> &bull;
-    <a class="ref" href="mailto:&#99;&#111;&#110;&#116;&#97;&#99;&#116;@&#115;&#107;&#101;&#116;&#99;&#104;&#50;&#109;&#111;&#100;&#101;&#108;.&#99;&#111;&#109;">contact</a>
-  </h2>
-</div>
-<div class="content">
-  {% block content %}{% endblock %}
-</div>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sketch2Model</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/app">Sketch2Model</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Intro</a></li>
+            <li><a href="/app">App</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/api_reference">API Reference</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='upload_options.js') }}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
