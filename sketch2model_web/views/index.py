@@ -43,7 +43,7 @@ def index():
                                    default=form)
 
         else:
-            return render_template("app.html", error=r["error"],
+            return render_template("app.html", error="Image processing error, please try again.",
                                    default=form)
 
     else:
