@@ -20,18 +20,16 @@
       Query the heartbeat to check if the Sketch2Model API is
       currently up and running.
     </p>
-    <p>
-    <code>http://www.sketch2model.com/api/heartbeat</code>
-    </p>
-    <pre><code>
+    <p><code>http://www.sketch2model.com/api/heartbeat</code></p>
+    <pre>
     <strong>Parameters</strong>
     None
 
     <strong>Response</strong>
     ok - success returns True, failure returns False
     error - success returns "", failure returns error details
-    </code></pre>
-    <pre><code>
+    </pre>
+    <pre>
     <strong>Example Query - Python</strong>
     import requests
 
@@ -42,7 +40,7 @@
 
     r.json()
     >> {'ok': True, 'error': ''}
-    </code></pre>
+    </pre>
 
     <h3>Main Sketch2Model API</h3>
     <p>
@@ -52,10 +50,8 @@
       model image hosted on s3. Please note that images are only
       hosted temporarily.
     </p>
-    <p>
-      <code>http://www.sketch2model.com/api</code>
-    </p>
-    <pre><code>
+    <p><code>http://www.sketch2model.com/api</code></p>
+    <pre>
     <strong>Parameters</strong>
     url - input image url
     contrast - contrast parameter value 0.1 to 0.9
@@ -66,8 +62,8 @@
     ok - success returns True, failure returns False
     url - success returns hosted model url, failure returns ""
     error - success returns "", failure returns some error details
-    <code></pre>
-    <pre><code>
+    </pre>
+    <pre>
     <strong>Example Query - Python</strong>
     import requests
 
@@ -77,24 +73,24 @@
     cmap = "Pastel2"
 
     payload = {
-        "url": url,
-        "contrast": contrast,
-        "closing": closing,
-        "cmap": cmap
+    "url": url,
+    "contrast": contrast,
+    "closing": closing,
+    "cmap": cmap
     }
 
     headers = {"Accept": "application/json"}
 
     r = requests.get("http://www.sketch2model.com/api/heartbeat",
-                     headers=headers,
-                     params=payload)
+    headers=headers,
+    params=payload)
 
     r.status_code
     >> 200
 
     r.json
     >> {'ok': True, 'error': '', url:'output_url_string'}
-    </code></pre>
+    </pre>
   </div>
 </div>
 
