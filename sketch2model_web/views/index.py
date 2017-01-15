@@ -50,7 +50,7 @@ def index():
         default_params = {"example": "Breaks",
                           "contrast": 0.5,
                           "closing": 3,
-                          "cmap": "Paired",
+                          "cmap": "viridis",
                           "options": "example"}
         return render_template("app.html", default=default_params)
 

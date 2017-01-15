@@ -40,6 +40,10 @@ def array_to_img(a, cmap, format="PNG"):
     ## Normalize color map to data
 
     cmap_dict = {
+        "viridis": cm.viridis,
+        "inferno": cm.inferno,
+        "plasma": cm.plasma,
+        "magma": cm.magma,
         "Accent": cm.Accent,
         "Dark2": cm.Dark2,
         "Paired": cm.Paired,

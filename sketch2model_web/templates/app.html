@@ -83,7 +83,11 @@
           <div class="row">
             <div class="form-group col-sm-8">
               <label for="examples" class="control-label">Colormap</label>
-              <select class="form-control" id="cmap" name="cmap" value="Dark2">
+              <select class="form-control" id="cmap" name="cmap">
+                <option {% if default.cmap=="viridis" %} selected="selected"{% endif %}>viridis</option>
+                <option {% if default.cmap=="inferno" %} selected="selected"{% endif %}>inferno</option>
+                <option {% if default.cmap=="plasma" %} selected="selected"{% endif %}>plasma</option>
+                <option {% if default.cmap=="magma" %} selected="selected"{% endif %}>magma</option>
                 <option {% if default.cmap=="Accent" %} selected="selected"{% endif %}>Accent</option>
                 <option {% if default.cmap=="Dark2" %} selected="selected"{% endif %}>Dark2</option>
                 <option {% if default.cmap=="Paired" %} selected="selected"{% endif %}>Paired</option>
@@ -93,7 +97,7 @@
                 <option {% if default.cmap=="Set2" %} selected="selected"{% endif %}>Set2</option>
                 <option {% if default.cmap=="Set3" %} selected="selected"{% endif %}>Set3</option>
               </select>
-              <small id="contrastHelp" class="form-text text-muted">Which matplotlib colormap to use for output</small>
+              <small id="contrastHelp" class="form-text text-muted">Which matplotlib colormap to use for output.</small>
             </div>
           </div>
 
