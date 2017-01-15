@@ -66,19 +66,17 @@
         <div class="panel-body">
           <div class="row">
             <div class="form-group col-sm-8">
-              <label for="contrast" class="control-label">Contrast</label>
+              <label for="contrast" class="control-label">Contrast <small class="form-text text-muted">[0.1 to 0.9]</small></label>
               <input type="number" step="0.1" value={{default.contrast}} min="0.1" max="0.9" class="form-control" id="contrast" placeholder="Val" name="contrast"/>
-              <small id="contrastHelp" class="form-text text-muted">How dark text needs to be to be recognized.</small>
-              <small id="contrastHelp" class="form-text text-muted">Lower the value to recognize lighter lines.</small>
+              <small id="contrastHelp" class="form-text text-muted">Value from 0.1 to 0.9. How dark text needs to be to be recognized. Lower the value to recognize lighter lines.</small>
             </div>
           </div>
 
           <div class="row">
             <div class="form-group col-sm-8">
-              <label for="closing" class="control-label">Closing</label>
+              <label for="closing" class="control-label">Closing <small class="form-text text-muted">[1 to 5]</small></label>
               <input type="number" step="1" value={{default.closing}} min="1" max="5" class="form-control" id="closing" placeholder="Val" name="closing"/>
-              <small id="contrastHelp" class="form-text text-muted">Size of morphological structuring element in pixels.</small>
-              <small id="contrastHelp" class="form-text text-muted">Increase value to close larger gaps.</small>
+              <small id="contrastHelp" class="form-text text-muted">Size of morphological structuring element in pixels. Increase value to close larger gaps.</small>
             </div>
           </div>
 
@@ -125,12 +123,12 @@
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="alert alert-info">
+            <div class="alert alert-success">
+              <h4>Model generated successfully</h4>
               <p>
-              This is your model! Hopefully it turned out alright, if
-              it didn't work out try playing around with the
-              parameters or simplifying the input image to look more
-              like the examples.
+                If this doesn't look like you expect then
+                try tuning the input parameters or simplifying the
+                source image to look more like the examples.
               </p>
             </div>
           </div>
