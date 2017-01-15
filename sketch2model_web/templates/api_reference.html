@@ -83,14 +83,14 @@
 
     headers = {"Accept": "application/json"}
 
-    r = requests.get("http://www.sketch2model.com/api/heartbeat",
+    r = requests.get("http://www.sketch2model.com/api",
     headers=headers,
     params=payload)
 
     r.status_code
     >> 200
 
-    r.json
+    r.json()
     >> {'ok': True, 'error': '', url:'output_url_string'}
     </pre>
   </div>
