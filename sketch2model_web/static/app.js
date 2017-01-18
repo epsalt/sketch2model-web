@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    $("#img_preview").error(function () {
+    $("img").error(function(){
         $(this).hide();
     });
 
@@ -34,3 +34,28 @@ var image_preview = function(event) {
     preview.src = URL.createObjectURL(event.target.files[0]);
     preview.style.display = "inline";
 };
+
+$("#app_form").submit(function(e) {
+    $.ajax({
+        url: 'http://localhost:5000/app/post',
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function(response){
+            if(response.ok == true){
+                $("#img_output").attr("src", response.url);
+                $("#success_note").show();
+                $("#img_output").show();
+                $("#error_container").hide();
+            }
+            else {
+                $("#error_note").text(response.error);
+                $("#success_note").hide();
+                $("#img_output").hide();
+                $("#error_container").show();
+            }
+        }
+    });
+    e.preventDefault();
+});
