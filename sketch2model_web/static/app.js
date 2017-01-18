@@ -36,6 +36,7 @@ var image_preview = function(event) {
 };
 
 $("#app_form").submit(function(e) {
+    $("#submit_button").html('<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Working...');
     $.ajax({
         url: '/app/post',
         type: 'POST',
@@ -43,6 +44,7 @@ $("#app_form").submit(function(e) {
         processData: false,
         contentType: false,
         success: function(response){
+            $("#submit_button").html('Submit');
             if(response.ok == true){
                 $("#img_output").attr("src", response.url);
                 $("#success_note").show();
