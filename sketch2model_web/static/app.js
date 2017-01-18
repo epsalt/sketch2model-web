@@ -37,7 +37,7 @@ var image_preview = function(event) {
 
 $("#app_form").submit(function(e) {
     $.ajax({
-        url: 'http://localhost:5000/app/post',
+        url: '/app/post',
         type: 'POST',
         data: new FormData(this),
         processData: false,
