@@ -22,7 +22,7 @@ def app_post():
         if f.filename == "":
             r = {"ok": False,
                  "url": "",
-                 "error": "No selected file"}
+                 "error": "No selected file. Please select an image file or use one of our examples."}
 
             return jsonify(r)
 
@@ -30,7 +30,7 @@ def app_post():
             fname = upload(f, model=False)
 
         except ValueError:
-            error = "Sketch2Model does not accept this filetype, try again with jpg, gif or png"
+            error = "Sketch2Model does not accept this filetype. Please try again with a jpg, gif or png."
             r = {"ok": False,
                  "url": "",
                  "error": error}
