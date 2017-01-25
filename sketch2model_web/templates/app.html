@@ -114,6 +114,28 @@
 
 <div class="row">
   <div class="col-sm-6">
+    <div id="success_note" class="alert alert-success" style="display: none;">
+      <h4>Model generated successfully</h4>
+      <p>
+        If this doesn't look like you expect then
+        try tuning the input parameters or simplifying the
+        source image to look more like the examples.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div id="error_container" class="alert alert-danger" style="display: none;">
+      <h4>Error - Model not generated</h4>
+      <p id="error_note"></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h2 class="panel-title">Output Model</h2>
@@ -123,23 +145,6 @@
           <div class="col-sm-6">
             <div id="img_container">
               <img id="img_output" class="img-rounded" width="250">
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div id="success_note" class="alert alert-success" style="display: none;">
-              <h4>Model generated successfully</h4>
-              <p>
-                If this doesn't look like you expect then
-                try tuning the input parameters or simplifying the
-                source image to look more like the examples.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <div id="error_container" class="alert alert-danger" style="display: none;">
-              <p id="error_note"></p>
             </div>
           </div>
         </div>
