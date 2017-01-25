@@ -21,7 +21,7 @@ $(document).ready(function(){
 
     });
 
-    $("#examples").click(function() {
+    $("#examples").change(function() {
         var selected = $(this).val();
         var s3_url = "https://s3-us-west-2.amazonaws.com/sketch2model/examples/";
         $("#img_example").attr("src", s3_url + selected + ".png");
