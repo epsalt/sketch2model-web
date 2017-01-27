@@ -1,12 +1,12 @@
 {% extends "boilerplate.html" %}
 {% block content %}
 
-
 <div class="row">
   <div class="col-sm-offset-2 col-sm-8">
     <div class="page-header">
-      <h1>The Team</h1>
+      <h1>About sketch2model</h1>
     </div>
+    <h2>The Team</h2>
     <p>
       Sketch2Model was created
       by <a href="https://scibbatical.wordpress.com/">
@@ -15,19 +15,43 @@
     </p>
     <p>
       Big shoutouts to <a href="https://twitter.com/kwinkunks">Matt
-      Hall</a> with <a href="https://agilescientific.com/"> Agile
-      Scientific</a> for organizing the hackathon
-      and <a href="https://github.com/ben-bougher">Ben Bougher</a> for
-      all the help.
+        Hall</a> with <a href="https://agilescientific.com/"> Agile
+        Scientific</a> for organizing the hackathon
+        and <a href="https://github.com/ben-bougher">Ben Bougher</a>
+        for all the help.
     </p>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-sm-offset-2 col-sm-8">
-    <div class="page-header">
-      <h1 id="about-sketch2model">More about sketch2model</h1>
-    </div>
+    <h2>Further Reading</h2>
+    <strong>Articles about sketch2model</strong>
+    <ul>
+      <li><a href="https://scibbatical.wordpress.com/2016/05/02/sketch2model/">
+          An Introduction to sketch2model</a> (Elwyn)
+      </li>
+      <li>
+        <a href="https://scibbatical.wordpress.com/2016/12/10/mild-or-wild/">
+          Robustness through Morphological Filtering</a> (Elwyn)
+      </li>
+      <li>
+        <a href="https://mycarta.wordpress.com/2016/05/25/sketch2model-sketch-image-enhancements/">
+          sketch2model Image Enhancements</a> (Matteo)
+      </li>
+      <li>
+        <a href="https://mycarta.wordpress.com/2016/07/22/sketch2model-linking-edges-with-mathematical-morphology/">
+          Linking Edges with Mathematical Morphology</a> (Matteo)
+      </li>
+    </ul>
+    <strong>sketch2model Code on Github</strong>
+    <ul>
+      <li>
+        <a href="https://github.com/mycarta/sketch2model">
+          Python sketch2model image processing algorithm code </a>
+      </li>
+      <li>
+        <a href="https://github.com/epsalt/sketch2model_web">
+          Flask code for this website
+        </a>
+      </li>
+    </ul>
+    <h2 id="about-sketch2model">The Idea</h2>
     <p>
       The idea behind sketch2model is that a user should be able to
       easily create forward seismic models. Modeling at the speed of
@@ -49,9 +73,10 @@
       <img src="static/overview.png" class="center-block img-responsive" alt="wedges">
       <figcaption>
         <p class="text-muted">
-          The skech2model concept: modelling at the speed of imagination. Take a
-          sketch (a), turn it into an earth model (b), create a forward seismic
-          model (c). Sketch2model takes you from a to b.
+          The skech2model concept: modelling at the speed of
+          imagination. Take a sketch (a), turn it into an earth model
+          (b), create a forward seismic model (c). Sketch2model takes
+          you from a to b.
         </p>
       </figcaption>
     </figure>
@@ -74,9 +99,9 @@
           Collaboration in action. Evan, Matteo, and Elwyn
           (foreground, L to R) work on sketch2model at
           the <a href="http://www.agilegeoscience.com/blog/2015/5/15/canadian-codeshow">2015
-            Calgary Geoscience Hackathon.</a> Photo courtesy
+          Calgary Geoscience Hackathon.</a> Photo courtesy
           of <a href="https://www.linkedin.com/in/penny-colton-5a652914">Penny
-            Colton.</a>
+          Colton.</a>
         </p>
       </figcaption>
     </figure>
@@ -212,25 +237,6 @@
       posted on these sites is scant right now, but we are working to
       add more information and documentation through time.
     </p>
-    <h2 id="reading">Further reading</h2>
-    <ul>
-      <li>
-        Elwyn's articles about sketch2model:
-        <a href="https://scibbatical.wordpress.com/2016/05/02/sketch2model/">
-        an introduction to sketch2model</a> and
-        <a href="https://scibbatical.wordpress.com/2016/12/10/mild-or-wild/">
-        robustness through morphological filtering.</a>
-      </li>
-      <li>
-        Matteo's articles on sketch2model:
-        <a href="https://mycarta.wordpress.com/2016/05/25/sketch2model-sketch-image-enhancements/">
-        sketch2model image enhancements</a> and
-        <a href="https://mycarta.wordpress.com/2016/07/22/sketch2model-linking-edges-with-mathematical-morphology/">
-        linking edges with mathematical morphology</a>
-      </li>
-    </ul>
-    
   </div>
 </div>
-
 {% endblock %}
