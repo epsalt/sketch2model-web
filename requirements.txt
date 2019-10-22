@@ -13,7 +13,7 @@ matplotlib==1.5.3
 networkx==1.11
 numpy==1.11.2
 piexif==1.0.3
-Pillow==3.4.2
+Pillow==6.2.0
 py==1.4.32
 pyamg==3.2.1
 pyparsing==2.1.1
