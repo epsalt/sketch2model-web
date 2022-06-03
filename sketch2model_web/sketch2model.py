@@ -1,6 +1,6 @@
 import numpy as np
 import scipy as sp
-from skimage import color, exposure, morphology, measure, segmentation
+from skimage import color, exposure, measure, morphology, segmentation
 
 
 class Sketch2Model:
@@ -13,7 +13,7 @@ class Sketch2Model:
         hollow sketch and assign them discrete labels"""
 
         # Compressor
-        im = color.rgb2gray(self.initial_image[0:-1:2, 0:-1:2])
+        im = color.rgb2gray(self.initial_image[0:-1:2, 0:-1:2][:, :, :3])
         flt2 = sp.ndimage.filters.gaussian_filter(im**2, 21)
         self.compressed = im / (np.sqrt(flt2))
 

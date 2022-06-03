@@ -1,63 +1,54 @@
-from flask import redirect, render_template, request, jsonify, url_for
+import base64
+import io
+
 import requests
-
+from flask import current_app, jsonify, render_template, request, url_for
 from sketch2model_web import app
-from sketch2model_web.utils import upload, s3_url
+from sketch2model_web.utils import allowed_file
+from werkzeug.datastructures import FileStorage
 
-@app.route("/app", methods=['GET'])
+
+@app.route("/", methods=["GET"])
 def index():
     return render_template("app.html")
 
-@app.route("/app/post", methods=['POST'])
+
+@app.route("/app/post", methods=["POST"])
 def app_post():
     form = request.form
 
     if form.get("options") == "example":
         ex_name = form.get("example")
-        url = s3_url(ex_name + ".png").get('example')
+        fname = ex_name + ".png"
+        with current_app.open_resource("static/" + fname) as example:
+            buf = io.BytesIO(example.read())
+            f = FileStorage(buf, fname)
 
     else:
-        f = request.files['upload']
+        f = request.files["upload"]
 
         if f.filename == "":
-            r = {"ok": False,
-                 "url": "",
-                 "error": "No selected file. Please select an image file or use one of our examples."}
+            r = {
+                "ok": False,
+                "error": "No selected file. Please select an image file or use one of our examples.",
+            }
 
             return jsonify(r)
 
-        try:
-            fname = upload(f, model=False)
-
-        except ValueError:
+        if not allowed_file(f.filename):
             error = "Sketch2Model does not accept this filetype. Please try again with a jpg, gif or png."
-            r = {"ok": False,
-                 "url": "",
-                 "error": error}
+            r = {"ok": False, "error": error}
 
             return jsonify(r)
 
-        url = s3_url(fname).get('uploaded')
+    payload = {
+        "img": base64.b64encode(f.read()).decode("ASCII"),
+        "example": form.get("example"),
+        "contrast": form.get("contrast"),
+        "closing": form.get("closing"),
+        "cmap": form.get("cmap"),
+    }
 
-    payload = {"url": url,
-               "example": form.get("example"),
-               "contrast": form.get("contrast"),
-               "closing": form.get("closing"),
-               "cmap": form.get("cmap")}
-
-    r = requests.get(url_for('api_sketch2model', _external=True),
-                    params=payload).json()
+    r = requests.post(url_for("api_sketch2model", _external=True), data=payload).json()
 
     return jsonify(r)
-
-@app.route("/")
-def intro():
-    return render_template("intro.html")
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
-
-@app.route("/api_reference")
-def api_reference():
-    return render_template("api_reference.html")

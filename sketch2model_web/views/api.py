@@ -1,8 +1,9 @@
-from sketch2model_web import app
-from flask import request, jsonify
+import base64
 
+from flask import jsonify, request
+from sketch2model_web import app
 from sketch2model_web.sketch2model import Sketch2Model
-from sketch2model_web.utils import load_img, upload, array_to_img, s3_url
+from sketch2model_web.utils import array_to_img, load_img
 
 
 @app.route("/api/heartbeat")
@@ -12,42 +13,44 @@ def api_heartbeat():
     return jsonify(result)
 
 
-@app.route("/api")
+@app.route("/api", methods=["POST"])
 def api_sketch2model():
-
     try:
-        url = request.args["url"]
-        contrast = float(request.args["contrast"])
-        closing = int(request.args["closing"])
-        cmap = request.args["cmap"]
+        img = request.form["img"]
+        contrast = float(request.form["contrast"])
+        closing = int(request.form["closing"])
+        cmap = request.form["cmap"]
 
-    except Exception as e:
+    except Exception:
         result = {"ok": False, "url": "", "error": "url parameter not found"}
         return jsonify(result)
 
     try:
-        img = load_img(url)
+        img = load_img(img)
 
-    except OSError as e:
+    except OSError:
         result = {"ok": False, "url": "", "error": "could not open image file"}
         return jsonify(result)
 
     try:
-        model = Sketch2Model(load_img(url), contrast=contrast, closing=closing)
+        model = Sketch2Model(img, contrast=contrast, closing=closing)
 
         if model.nregions == 1:
             result = {
                 "ok": False,
-                "url": "",
+                "img": "",
                 "error": "only identified one region in input image, try tuning parameters or simplify input image",
             }
 
         else:
-            fname = upload(array_to_img(model.final, cmap), model=True)
-            url = s3_url(fname)
-            result = {"ok": True, "url": url.get("modeled"), "error": ""}
+            img = array_to_img(model.final, cmap)
+            result = {
+                "ok": True,
+                "img": base64.b64encode(img.read()).decode("ASCII"),
+                "error": "",
+            }
         return jsonify(result)
 
     except Exception as e:
-        result = {"ok": False, "url": "", "error": str(e)}
+        result = {"ok": False, "img": "", "error": str(e)}
         return jsonify(result)
